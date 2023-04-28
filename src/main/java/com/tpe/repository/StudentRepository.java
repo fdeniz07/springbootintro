@@ -18,15 +18,15 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
     List<Student> findByLastName(String lastName);
 
 
-    //JPQL
+    // JPQL
     @Query("SELECT s FROM Student s WHERE s.grade=:pGrade")
     List<Student> findAllEqualsGrade(@Param("pGrade") Integer grade);
 
-
-    //SQL
-    @Query(value= "SELECT * FROM Student s WHERE s.grage=:pGrade",nativeQuery = true )
+    // SQL
+    @Query(value ="SELECT * FROM Student s WHERE s.grade=:pGrade" , nativeQuery = true)
     List<Student> findAllEqualsGradeWithSQL(@Param("pGrade") Integer grade);
 
-    @Query("SELECT new com.tpe.dto.StudentDto(s)  FROM Student s WHERE s.id:id")
-    Optional<StudentDto> findStudentDTOById(Long id);
+    // JPQL mucizesi ile POJO-DTO donusumu
+    @Query("SELECT new com.tpe.dto.StudentDto(s) FROM Student s WHERE s.id=:id")
+    Optional<StudentDto> findStudentDTOById(@Param("id")Long id);
 }
