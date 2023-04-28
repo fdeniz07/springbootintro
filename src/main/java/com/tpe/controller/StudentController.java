@@ -126,6 +126,24 @@ public class StudentController {
 
         return ResponseEntity.ok(list);
     }
+
+    //!!! get All Student By Grade (JPQL)
+    @GetMapping("/grade/{grade}") // http://localhost:8080/students/grade/75  + GET
+    public ResponseEntity<List<Student>> getStudentsEqualsGrade(@PathVariable("grade") Integer grade) {
+
+        List<Student> list = studentService.findAllEqualsGrade(grade);
+
+        return ResponseEntity.ok(list);
+    }
+
+
+    //!!! DB'den direkt DTO olarak datami almak isertersem
+    @GetMapping("/query/dto") //http://localhost:8080/students/query/dto
+    public ResponseEntity<StudentDto> getStudentDTO(@RequestParam("id") Long id) {
+        StudentDto studentDto = studentService.findStudentDTOById(id);
+        return ResponseEntity.ok(studentDto);
+
+    }
 }
 
 
