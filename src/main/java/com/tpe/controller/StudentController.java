@@ -1,8 +1,13 @@
 package com.tpe.controller;
 
 import com.tpe.domain.Student;
+import com.tpe.dto.StudentDto;
 import com.tpe.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +55,7 @@ public class StudentController {
 
 
     //request param / path variable
-    //cok sorgu request tek sorgu path
+    //coklu sorguda RequestParam, tek sorguda PathVariable kullanilir-
     //bir data path ile alindiginda // http://localhost:8080/students/1
     //request param okunakli, key+value
     //best practice tek data path variable cok data request param
@@ -64,7 +69,7 @@ public class StudentController {
     }
 
     //!!! Get a Student by ID via PathVariable
-    @GetMapping("{id}")
+    @GetMapping("{id}") //http://localhost:8080/students/1
     public ResponseEntity<Student> getStudentWithPath(@PathVariable("id") Long id) {
 
         Student student = studentService.findStudent(id);
@@ -74,27 +79,53 @@ public class StudentController {
 
     //!!!Delete Student with id
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String,String>> deleteStudent(@PathVariable("id") Long id){
+    public ResponseEntity<Map<String, String>> deleteStudent(@PathVariable("id") Long id) { //Birden fazla data alinacaksa @PathVariable("id") yazilmali
 
         studentService.deleteStudent(id);
 
-
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("message", "Student is deleted successfuly");
         map.put("status", "true");
 
         return new ResponseEntity<>(map, HttpStatus.OK); // return ResponseEntity.ok(map);
+    }
 
+    //!!! Update Student  --> Gerekli olanlar endPoint + id + güncellenecek bilgiler (PathVariable(json))
+    @PutMapping("{id}") //http://localhost:8080/students/1
+    public ResponseEntity<Map<String, String>> updateStudent(@PathVariable Long id, @RequestBody StudentDto studentDto) { //tek data alinacaksa @PathVariable long id seklinde parantez icinde id yazilmasa da olur.
+
+        studentService.updateStudent(id, studentDto);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("message", "Student is updated successfuly");
+        map.put("status", "true");
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    //!!! pageable
+    @GetMapping("/page") //http://localhost:8080/students/page
+    public ResponseEntity<Page<Student>> getAllWithPage(
+            @RequestParam("page") int page, //kacinci sayfa gelsin
+            @RequestParam("size") int size,  //sayfa basi kac ürün gelsin
+            @RequestParam("sort") String prop, //hangi field'e göre siralanacak  --> opsiyoneldir
+            @RequestParam("direction") Sort.Direction direction  //siralama türü  --> opsiyoneldir
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, prop));
+        Page<Student> studentPage = studentService.getAllWithPage(pageable);
+
+        return ResponseEntity.ok(studentPage);
     }
 
 
+    //!!! Get By LastName
+    @GetMapping("/querylastname")
+    public ResponseEntity<List<Student>> getStudentByLastName(@RequestParam("lastName") String lastName) {
+
+        List<Student> list = studentService.findStudent(lastName);
+
+        return ResponseEntity.ok(list);
+    }
 }
 
 
-/*
-    @GetMapping("/{id}")
-    public ResponseEntity<Student> getById(@PathVariable @RequestParam(name = "id") int id){
-        ...
-    }
-
- */
