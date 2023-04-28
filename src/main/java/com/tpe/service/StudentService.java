@@ -86,10 +86,10 @@ public class StudentService {
         return studentRepository.findAllEqualsGrade(grade);
     }
 
-    public List<Student> findAllEqualsGradeWithSQL(Integer grade) {
-
-        return studentRepository.findAllEqualsGradeWithSQL(grade);
-    }
+//    public List<Student> findAllEqualsGradeWithSQL(Integer grade) {
+//
+//        return studentRepository.findAllEqualsGradeWithSQL(grade);
+//    }
 
 
     public StudentDto findStudentDTOById(Long id) {
