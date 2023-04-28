@@ -68,11 +68,33 @@ public class StudentService {
         studentRepository.save(student);
     }
 
+
     public Page<Student> getAllWithPage(Pageable pageable) {
+
         return studentRepository.findAll(pageable);
     }
 
-    public List<Student> findStudent(String lastName){
+
+    public List<Student> findStudent(String lastName) {
+
         return studentRepository.findByLastName(lastName);
+    }
+
+
+    public List<Student> findAllEqualsGrade(Integer grade) {
+
+        return studentRepository.findAllEqualsGrade(grade);
+    }
+
+    public List<Student> findAllEqualsGradeWithSQL(Integer grade) {
+
+        return studentRepository.findAllEqualsGradeWithSQL(grade);
+    }
+
+
+    public StudentDto findStudentDTOById(Long id) {
+
+        return studentRepository.findStudentDTOById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Student not found with id : " + id));
     }
 }
