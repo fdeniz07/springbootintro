@@ -28,3 +28,9 @@ logging:   #logging
     '[org.springframework.web]': WARN
     '[org.hibernate]': INFO
     '[com.tpe]': INFO
+
+management: #actuator
+  endpoints:
+    web:
+      exposure:
+        include: ['health','loggers','env','beans']
