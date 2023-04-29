@@ -8,6 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,9 +26,9 @@ public class Student {
     //   @Getter
     private Long id;
 
-    @NotNull(message="first name can not be null")
-    @NotBlank(message="first name can not be white space")
-    @Size(min=2, max=25, message="First name '${validatedValue}' must be between {min} and {max} long")
+    @NotNull(message = "first name can not be null")
+    @NotBlank(message = "first name can not be white space")
+    @Size(min = 2, max = 25, message = "First name '${validatedValue}' must be between {min} and {max} long")
     @Column(nullable = false, length = 25)
 //    @Getter
 //    @Setter
@@ -38,11 +40,14 @@ public class Student {
     private /*final*/ Integer grade;
 
     @Column(nullable = false, unique = true)
-    @Email(message="Provide valid email")
+    @Email(message = "Provide valid email")
     private /*final*/ String email;
 
     private /*final*/ String phoneNumber;
 
     //@Setter(AccessLevel.NONE)
     private LocalDateTime createDate = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "student")
+    private List<Book> book = new ArrayList<>();
 }
