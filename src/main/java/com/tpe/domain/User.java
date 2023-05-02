@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 
@@ -42,7 +41,7 @@ public class User {
                 inverseJoinColumns = @JoinColumn(name = "role_id"))
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> roles =new HashSet<>(); //list yapisinda unique lik olmadigi icin admin ve student türlerini devamli icine ekleyecektir. O yüzden bunu engellemek set kullandik
+    private Set<Role> role =new HashSet<>(); //list yapisinda unique lik olmadigi icin admin ve student türlerini devamli icine ekleyecektir. O yüzden bunu engellemek set kullandik
 
     @JsonIgnore
     @OneToOne(mappedBy = "user")
