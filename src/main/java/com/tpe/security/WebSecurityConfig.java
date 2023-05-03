@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration  //Security katmanina bu class'in konfigürasyon class'i oldugunu söylüyoruz
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true) //Metot seviyede yetkilendirme yapacagimizi söylüyoruz
+@EnableGlobalMethodSecurity(prePostEnabled = true) //Metot seviyede yetkilendirme yapacagimizi söylüyoruz / Eger endpoint seviyesinde yetkilendirmes yapilacaksa burasi yazilmaz
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     //!!! Bu class'daki 1. amacimiz : AuthenticationManager
@@ -32,7 +32,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.csrf().disable(). //csrf korumasini kapatiyoruz. Browserin farkli tablari arasinda gecis ile araya girme saldirilarina csrf saldirilari denir.
                 authorizeHttpRequests().
-                antMatchers("/", "index.html", "/css/*", "/js/*").permitAll(). //bu endpoint'leri yetkili mi diye kontrol etme
+                antMatchers("/",
+                                        "index.html",
+                                        "/register",
+                                        "/css/*",
+                                        "/js/*").permitAll(). //bu endpoint'leri yetkili mi diye kontrol etme (anonim olarak git yükle)
+               //and().
+               // authorizeRequests().antMatchers("/students/**").hasRole("ADMIN"). //Endpoint(Class) bazinda seviye yetkilendirmesi bu sekilde
                 anyRequest(). //muaf tutulan endpointler disinda gelen herhangi bir requesti
                 authenticated().//yetkili mi diye kontrol et
                 and().
@@ -47,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public DaoAuthenticationProvider authProvider(){
+    public DaoAuthenticationProvider authProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setPasswordEncoder(passwordEncoder()); //encoder ile tanistiriyoruz
         authProvider.setUserDetailsService(userDetailsService); //userDetailService ile tanistiriyoruz
