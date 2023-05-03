@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,7 @@ public class StudentController {
 
     //!!! Bütün ögrencileri getirelim
     @GetMapping() //http://localhost:8080/students + GET
+    @PreAuthorize("hasRole('ADMIN')") //Bu metoda sadece ADMIN yetkisi olan kullanicilar erisebilsin. hasRole, ADMIN'in önüne "ROLE_" ekini otomatik ekler
     public ResponseEntity<List<Student>> getAll() {
         List<Student> students = studentService.getAll();
 
@@ -49,6 +51,7 @@ public class StudentController {
 
     //!!! Create a new student
     @PostMapping  // http://localhost:8080/students/  + POST  + JSON
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> createStudent(@Valid @RequestBody Student student) {
         studentService.createStudent(student);
 
